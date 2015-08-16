@@ -178,8 +178,9 @@ wxWindowID pxIssueConfirmation( wxDialogWithHelpers& confirmDlg, const MsgButton
 			result = split[0];
 			if( result == L"disabled" || result == L"off" || result == L"no" )
 			{
-				int result = ParseThatResult( split[1], buttons );
-				if( result != wxID_ANY ) return result;
+				int resultNum = ParseThatResult( split[1], buttons );
+				//if( resultNum != wxID_ANY ) //This condition means that Custom-labelled buttons won't be disablable - why did it exist?
+				return resultNum;
 			}
 		}
 	}

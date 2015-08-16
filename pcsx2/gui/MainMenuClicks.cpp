@@ -147,7 +147,10 @@ wxWindowID SwapOrReset_Iso( wxWindow* owner, IScopedCoreThread& core_control, co
 		dialog += dialog.GetCharHeight();
 		dialog += dialog.Heading(_("Do you want to swap discs or boot the new image (via system reset)?"));
 
-		result = pxIssueConfirmation( dialog, MsgButtons().Reset().Cancel().Custom(_("Swap Disc"), "swap"), L"DragDrop.BootSwapIso" );
+		//Cancel is not one of the buttons: it might accidentally be chosen by the "do not show this option again" disabler
+		result = pxIssueConfirmation( dialog, MsgButtons().Reset()/*.Cancel().*/.Custom(_("Swap Disc"), "swap"), L"DragDrop.BootSwapIso" );
+		
+		//The user can still cancel by closing the popup dialog
 		if( result == wxID_CANCEL )
 		{
 			core_control.AllowResume();
