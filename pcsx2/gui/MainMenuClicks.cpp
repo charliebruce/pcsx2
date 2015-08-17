@@ -123,7 +123,7 @@ void MainEmuFrame::Menu_ResetAllSettings_Click(wxCommandEvent &event)
 }
 
 // Return values:
-//   wxID_CANCEL - User canceled the action outright.
+//   wxID_CANCEL - User canceled the action by closing the dialog.
 //   wxID_RESET  - User wants to reset the emu in addition to swap discs
 //   (anything else) - Standard swap, no reset.  (hotswap!)
 wxWindowID SwapOrReset_Iso( wxWindow* owner, IScopedCoreThread& core_control, const wxString& isoFilename, const wxString& descpart1 )
