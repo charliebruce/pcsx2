@@ -152,6 +152,8 @@ public:
 	void CommitPreset_noTrigger();
 	void AppendKeycodeNamesToMenuOptions();
 
+	bool ResetOnSwap(void);
+
 protected:
 	void DoGiveHelp(const wxString& text, bool show);
 
@@ -212,6 +214,7 @@ protected:
 	void _DoBootCdvd();
 	bool _DoSelectIsoBrowser( wxString& dest );
 	bool _DoSelectELFBrowser();
+
 
 // ------------------------------------------------------------------------
 //     MainEmuFram Internal API for Populating Main Menu Contents

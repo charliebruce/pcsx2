@@ -86,6 +86,10 @@ enum MenuIdentifiers
 	MenuId_Src_Iso,
 	MenuId_Src_Plugin,
 	MenuId_Src_NoDisc,
+
+	MenuId_SwpMode_Swap,
+	MenuId_SwpMode_Reset,
+
 	MenuId_Boot_Iso,			// Opens submenu with Iso browser, and recent isos.
 	MenuId_IsoSelector,			// Contains a submenu of selectable "favorite" isos
 	MenuId_RecentIsos_reservedStart,

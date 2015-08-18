@@ -38,4 +38,4 @@ public:
 
 
 extern wxString GetMsg_ConfirmSysReset();
-extern wxWindowID SwapOrReset_Iso( wxWindow* owner, IScopedCoreThread& core_control, const wxString& isoFilename, const wxString& descpart1 );
+extern void SwapOrReset_Iso( wxWindow* owner, IScopedCoreThread& core_control, const wxString& isoFilename, const wxString& descpart1 );

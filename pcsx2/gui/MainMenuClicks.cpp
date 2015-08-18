@@ -122,45 +122,36 @@ void MainEmuFrame::Menu_ResetAllSettings_Click(wxCommandEvent &event)
 	wxGetApp().PostMenuAction( MenuId_Exit );
 }
 
-// Return values:
-//   wxID_CANCEL - User canceled the action by closing the dialog.
-//   wxID_RESET  - User wants to reset the emu in addition to swap discs
-//   (anything else) - Standard swap, no reset.  (hotswap!)
-wxWindowID SwapOrReset_Iso( wxWindow* owner, IScopedCoreThread& core_control, const wxString& isoFilename, const wxString& descpart1 )
+bool MainEmuFrame::ResetOnSwap(void) {
+	
+	wxMenuItem* rst = m_menuCDVD.FindChildItem(MenuId_SwpMode_Reset);
+	
+	if (rst)
+		return rst->IsChecked();
+	
+	return false;
+}
+
+
+void SwapOrReset_Iso( wxWindow* owner, IScopedCoreThread& core_control, const wxString& isoFilename, const wxString& descpart1 )
 {
-	wxWindowID result = wxID_CANCEL;
 
 	if( (g_Conf->CdvdSource == CDVDsrc_Iso) && (isoFilename == g_Conf->CurrentIso) )
 	{
 		core_control.AllowResume();
-		return result;
+		return;
 	}
 
-	if( SysHasValidState() )
+	if (!SysHasValidState())
 	{
-		core_control.DisallowResume();
-		wxDialogWithHelpers dialog( owner, _("Confirm ISO image change") );
-
-		dialog += dialog.Heading(descpart1);
-		dialog += dialog.GetCharHeight();
-		dialog += dialog.Text(isoFilename);
-		dialog += dialog.GetCharHeight();
-		dialog += dialog.Heading(_("Do you want to swap discs or boot the new image (via system reset)?"));
-
-		//Cancel is not one of the buttons: it might accidentally be chosen by the "do not show this option again" disabler
-		result = pxIssueConfirmation( dialog, MsgButtons().Reset()/*.Cancel().*/.Custom(_("Swap Disc"), "swap"), L"DragDrop.BootSwapIso" );
-		
-		//The user can still cancel by closing the popup dialog
-		if( result == wxID_CANCEL )
-		{
-			core_control.AllowResume();
-			return result;
-		}
+		return;
 	}
 
 	g_Conf->CdvdSource = CDVDsrc_Iso;
 	SysUpdateIsoSrcFile( isoFilename );
-	if( result == wxID_RESET )
+	
+	
+	if (GetMainFrame().ResetOnSwap())
 	{
 		core_control.DisallowResume();
 		sApp.SysExecute( CDVDsrc_Iso );
@@ -174,8 +165,7 @@ wxWindowID SwapOrReset_Iso( wxWindow* owner, IScopedCoreThread& core_control, co
 	}
 
 	GetMainFrame().EnableCdvdPluginSubmenu( g_Conf->CdvdSource == CDVDsrc_Plugin );
-
-	return result;
+	return;
 }
 
 wxWindowID SwapOrReset_CdvdSrc( wxWindow* owner, CDVD_SourceType newsrc )
@@ -375,6 +365,8 @@ void MainEmuFrame::Menu_CdvdSource_Click( wxCommandEvent &event )
 		case MenuId_Src_Iso:	newsrc = CDVDsrc_Iso;		break;
 		case MenuId_Src_Plugin:	newsrc = CDVDsrc_Plugin;	break;
 		case MenuId_Src_NoDisc: newsrc = CDVDsrc_NoDisc;	break;
+		case MenuId_SwpMode_Reset: return;
+		case MenuId_SwpMode_Swap: return;
 		jNO_DEFAULT
 	}
 

@@ -456,6 +456,10 @@ MainEmuFrame::MainEmuFrame(wxWindow* parent, const wxString& title)
 	m_menuCDVD.Append( MenuId_Src_Plugin,	_("Plugin"),	_("Uses an external plugin as the CDVD source."), wxITEM_RADIO );
 	m_menuCDVD.Append( MenuId_Src_NoDisc,	_("No disc"),	_("Use this to boot into your virtual PS2's BIOS configuration."), wxITEM_RADIO );
 
+	m_menuCDVD.AppendSeparator();
+	m_menuCDVD.Append(MenuId_SwpMode_Reset, _("Cold-Swap"), _("Reset the emulator when the disc changes."), wxITEM_RADIO);
+	m_menuCDVD.Append(MenuId_SwpMode_Swap, _("Hot-Swap"), _("Swap discs without resetting the emulator."), wxITEM_RADIO);
+
 	//m_menuCDVD.AppendSeparator();
 	//m_menuCDVD.Append( MenuId_SkipBiosToggle,_("Enable BOOT2 injection"),
 	//	_("Skips PS2 splash screens when booting from Iso or DVD media"), wxITEM_CHECK );
