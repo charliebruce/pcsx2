@@ -153,14 +153,25 @@ void SwapOrReset_Iso( wxWindow* owner, IScopedCoreThread& core_control, const wx
 	
 	if (GetMainFrame().ResetOnSwap())
 	{
+		//Prompt the user to tell them that resetting will lose progress 
+
+		wxDialogWithHelpers dialog(owner, _("Confirm PS2 Reset"));
+		dialog += dialog.Heading(GetMsg_ConfirmSysReset());
+		bool confirmed = (pxIssueConfirmation(dialog, MsgButtons().Yes().Cancel(), L"BootCdvd.ConfirmReset") != wxID_CANCEL);
+
+		if (!confirmed)
+		{
+			core_control.AllowResume();
+			return;
+		}
+
+
 		core_control.DisallowResume();
 		sApp.SysExecute( CDVDsrc_Iso );
 	}
 	else
 	{
 		Console.Indent().WriteLn( "HotSwapping to new ISO src image!" );
-		//g_Conf->CdvdSource = CDVDsrc_Iso;
-		//CoreThread.ChangeCdvdSource();
 		core_control.AllowResume();
 	}
 
